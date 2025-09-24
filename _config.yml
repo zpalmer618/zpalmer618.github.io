@@ -1,0 +1,6 @@
+title: My Website
+nav_items:
+  - title: Home
+    url: /
+  - title: About
+    url: /about.html

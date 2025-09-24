@@ -36,3 +36,9 @@ body {
     background: #f0f0f0;
     color: #666;
   }
+
+  nav a.active {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #ff6600; /* Highlight color */
+  }  
