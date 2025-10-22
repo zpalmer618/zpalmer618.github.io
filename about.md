@@ -2,8 +2,9 @@
 layout: default
 title: About
 ---
-# About Me
 
-This is the About page!
+# <p align="center"> About Me </p>
 
-This is where I will put a little biography of myself, and maybe include a picture! 
+<p align="center"> ![Me at the Onsala Space Observatory in Onsala, Sweden](/images/website_image.png) </p>
+
+Hi, folks! My name is Dr. C. Zachary Palmer, and I am a recently hooded, postdoctoral research fellow with both the Missouri Univserity of Science and Technology (S & T) and the University of Missouri (Mizzou). I received my Ph.D. in Chemistry from the University of Mississippi (Ole Miss) in May 2025 under the advisement of Dr. Ryan C. Fortenberry. My [dissertation](/pdfs/diss.pdf) work focuses on the prediction of rovibrational spectral data for molecules of astrochemical and atmospheric importance. 
