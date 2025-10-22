@@ -9,7 +9,7 @@ title: About
     <img src="/images/website_image.png" 
          alt="Onsala Space Observatory" 
          width="200" height="275">
-    <figcaption>Outside the 25m telescope at the Onsala Space Observatory in Onsala, Sweden.</figcaption>
+    <figcaption>Onsala Space Observatory in Onsala, Sweden (2023).</figcaption>
     </figure>
 </div>
 
