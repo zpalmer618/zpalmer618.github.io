@@ -4,5 +4,5 @@ nav_items:
     url: /
   - title: About
     url: /about.html
-  - title: Blogs
-    url: /blogs.html
+  - title: Blog
+    url: /blog.html
