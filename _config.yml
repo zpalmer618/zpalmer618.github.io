@@ -1,7 +1,7 @@
 title: My Website
 nav_items:
   - title: Home
-    url: /home.html
+    url: /
   - title: About
     url: /about.html
   - title: Blogs
