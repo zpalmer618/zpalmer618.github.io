@@ -41,4 +41,22 @@ body {
     font-weight: bold;
     text-decoration: underline;
     color: #ff6600; /* Highlight color */
-  }  
+  }
+
+  .post-date {
+    color: #888;
+    font-size: 0.9em;
+  }
+  
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .post-list li {
+    margin-bottom: 0.8rem;
+  }
+  
+  .post-content p {
+    margin-bottom: 1rem;
+  }
