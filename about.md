@@ -8,7 +8,7 @@ title: About
     <figure>
     <img src="/images/website_image.png" 
          alt="Onsala Space Observatory" 
-         width="250" height="275">
+         width="250" >
     <figcaption>Onsala Space Observatory in Onsala, Sweden (2023).</figcaption>
     </figure>
 </div>
