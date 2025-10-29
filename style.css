@@ -93,6 +93,16 @@ footer {
   margin-top: 0.5rem;
 }
 
+/* Adding styles for the code-container to prevent overflow */
+.code-container {
+  overflow-x: auto;
+  max-width: 100%;
+  background-color: #f8f8f8;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   /* Switch to column layout for smaller screens to ensure better readability and stacking of content */
