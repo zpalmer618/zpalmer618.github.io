@@ -2,10 +2,14 @@
 layout: default
 ---
 {% assign image_side = page.image_side | default: "left" %}
+{% assign image_caption = page.image_caption | default: "" %}
 
 <div class="side-by-side{% if image_side == 'right' %} reverse{% endif %}">
     <div class="profile-image">
         <img src="{{ page.image }}" alt="{{ page.title }}">
+        {% if image_caption != "" %}
+        <div class="image-caption">{{ image_caption }}</div>
+        {% endif %}
     </div>
 
     <div class="bio-text">

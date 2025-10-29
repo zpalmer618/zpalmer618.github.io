@@ -65,7 +65,7 @@ body {
     .side-by-side,
     .side-by-side.reverse {
       flex-direction: column;
-      text-align: center;
+      text-align: justify;
     }
 
     .bio-text {
@@ -99,6 +99,7 @@ body {
   .profile-image img {
     width: auto; /* Allow image to scale dynamically */
     max-width: 300px; /* Ensure image doesn't exceed this size */
+    justify-content: center;
     height: auto;
     border-radius: 6px;
     display: block;
@@ -108,4 +109,12 @@ body {
   .bio-text img {
     max-width: 100%;
     height: auto;
+  }
+
+  /* Styling for the image caption below the profile image */
+  .image-caption {
+    font-size: 0.9em;
+    color: #666;
+    text-align: center;
+    margin-top: 0.5rem;
   }

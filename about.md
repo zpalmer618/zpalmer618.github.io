@@ -3,6 +3,7 @@ layout: profile
 title: About Me
 image: /images/website_image.png
 image_side: left
+image_caption: "Me at the Onsala Space Observatory. Onsala, Sweden (2023)"
 ---
 # About Me
 
