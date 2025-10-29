@@ -46,8 +46,8 @@ body {
 
   .side-by-side {
     display: flex;
-    align-items: flex-start; /* Adjust alignment to prevent centering */
-    justify-content: space-between; /* Ensure space between image and text */
+    align-items: center; /* Adjust alignment to prevent centering */
+    justify-content: center; /* Ensure space between image and text */
     gap: 1.5rem; /* Slightly reduce gap for better spacing */
     flex-wrap: nowrap; /* Prevent wrapping unless necessary */
     margin-top: 2rem;
