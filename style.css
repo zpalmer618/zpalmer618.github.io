@@ -90,3 +90,18 @@ body {
   .post-content p {
     margin-bottom: 1rem;
   }
+
+  /* Profile image sizing and responsive handling */
+  .profile-image img {
+    width: 220px; /* match the previous inline size */
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+  }
+
+  /* Make images inside the bio text responsive so they don't overflow */
+  .bio-text img {
+    max-width: 100%;
+    height: auto;
+  }
