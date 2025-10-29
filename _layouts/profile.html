@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+{% assign image_side = page, image_side | default: "left" %}
+
+<div class="side-by-side" {% if image_side == 'right' %}reverse{% endif %}>
+    <div class="profile-image">
+        <img src="{{ page.image }}" alt="{{ page.title }}">
+    </div>
+
+    <div class="bio-text">
+        {{content}}
+    </div>
+</div>

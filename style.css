@@ -44,6 +44,35 @@ body {
     color: #ff6600; /* Highlight color */
   }
 
+  .side-by-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .side-by-side.reverse {
+    flex-direction: row-reverse;
+  }
+
+  .bio-text {
+    max-width: 500px;
+  }
+
+  @media (max-width: 700px) {
+    .side-by-side,
+    .side-by-side.reverse {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .bio-text {
+      max-width: 90%;
+    }
+  }
+
   .post-date {
     color: #888;
     font-size: 0.9em;
