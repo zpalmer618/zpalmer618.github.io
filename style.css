@@ -46,10 +46,10 @@ body {
 
   .side-by-side {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+    align-items: flex-start; /* Adjust alignment to prevent centering */
+    justify-content: space-between; /* Ensure space between image and text */
+    gap: 1.5rem; /* Slightly reduce gap for better spacing */
+    flex-wrap: nowrap; /* Prevent wrapping unless necessary */
     margin-top: 2rem;
   }
 
@@ -58,7 +58,7 @@ body {
   }
 
   .bio-text {
-    max-width: 700px;
+    max-width: 600px; /* Reduce max-width for better balance */
   }
 
   @media (max-width: 1000px) {
@@ -70,6 +70,10 @@ body {
 
     .bio-text {
       max-width: 90%;
+    }
+
+    .profile-image img {
+      max-width: 100%; /* Ensure image scales properly on smaller screens */
     }
   }
 
@@ -93,8 +97,8 @@ body {
 
   /* Profile image sizing and responsive handling */
   .profile-image img {
-    width: 300px; /* match the previous inline size */
-    max-width: 100%;
+    width: auto; /* Allow image to scale dynamically */
+    max-width: 300px; /* Ensure image doesn't exceed this size */
     height: auto;
     border-radius: 6px;
     display: block;
