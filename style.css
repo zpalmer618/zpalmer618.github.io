@@ -74,12 +74,12 @@ footer {
 }
 
 .bio-text {
-  max-width: 600px;
+  max-width: 900px;
 }
 
 .profile-image img {
   width: auto;
-  max-width: 300px;
+  max-width: 400px;
   height: auto;
   border-radius: 6px;
   display: block;
@@ -94,7 +94,7 @@ footer {
 }
 
 /* Responsive Design */
-@media (max-width: 1000px) {
+@media (max-width: 1500px) {
   .side-by-side,
   .side-by-side.reverse {
     flex-direction: column;
