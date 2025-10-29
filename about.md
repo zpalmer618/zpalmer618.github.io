@@ -4,7 +4,6 @@ title: About Me
 image: /images/website_image.png
 image_side: left
 ---
-# (Image is provided via the `image` front matter and rendered by the `profile` layout.)
 # About Me
 
 Hi, folks! My name is Dr. Zach Palmer, and I recently graduated from the University of Mississippi with my Ph.D. in chemistry under the advisement of Dr. Ryan Fortenberry. Since 2017, much of my research career has been within the field of computational astrochemistry with much of my <a href="/pdfs/diss.pdf">dissertation</a> work focusing on the prediction of rovibrational spectral data for small molecules. As of August 2025, I started my position as a joint postdoctoral research fellow at the Missouri University of Science and Technology (MS&T) and the University of Missouri (Mizzou). Now, my research explores the quantum chemical treatment and prediction of the energetics for homogenous and heterogenous molecular clusters featuring weakly bound, non-covalent interactions.
