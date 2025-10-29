@@ -83,7 +83,7 @@ footer {
   height: auto;
   border-radius: 6px;
   display: block;
-  margin: auto;
+  margin: 1rem auto; /* Adds space around the image */
 }
 
 .image-caption {
