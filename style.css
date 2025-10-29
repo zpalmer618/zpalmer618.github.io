@@ -1,120 +1,130 @@
+/* Global Styles */
+:root {
+  --font-family: system-ui, sans-serif;
+  --background-color: #fafafa;
+  --text-color: #333;
+  --header-bg-color: #2d2d2d;
+  --header-text-color: #fff;
+  --highlight-color: #ff6600;
+  --footer-bg-color: #f0f0f0;
+  --footer-text-color: #666;
+  --post-date-color: #888;
+  --gap: 1.5rem;
+}
+
 body {
-    font-family: system-ui, sans-serif;
-    background: #fafafa;
-    color: #333;
-    margin: 0;
-    line-height: 1.6;
-  }
-  
-  header {
-    background: #2d2d2d;
-    color: #fff;
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  nav a {
-    color: #fff;
-    margin: 0 1rem;
-    text-decoration: none;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
-  main {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    text-align: justify;
-  }
-  
-  footer {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 1rem;
-    background: #f0f0f0;
-    color: #666;
-  }
+  font-family: var(--font-family);
+  background: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  line-height: 1.6;
+}
 
-  nav a.active {
-    font-weight: bold;
-    text-decoration: underline;
-    color: #ff6600; /* Highlight color */
-  }
+/* Layout */
+header {
+  background: var(--header-bg-color);
+  color: var(--header-text-color);
+  padding: 1rem;
+  text-align: center;
+}
 
-  .side-by-side {
-    display: flex;
-    align-items: center; /* Adjust alignment to prevent centering */
-    justify-content: center; /* Ensure space between image and text */
-    gap: 1.5rem; /* Slightly reduce gap for better spacing */
-    flex-wrap: nowrap; /* Prevent wrapping unless necessary */
-    margin-top: 2rem;
-  }
+nav a {
+  color: var(--header-text-color);
+  margin: 0 1rem;
+  text-decoration: none;
+}
 
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav a.active {
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--highlight-color);
+}
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: justify;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--footer-bg-color);
+  color: var(--footer-text-color);
+}
+
+/* Components */
+/* A utility class for creating a horizontally aligned layout with evenly spaced items */
+.side-by-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  margin-top: 2rem;
+}
+
+.side-by-side.reverse {
+  flex-direction: row-reverse;
+}
+
+.bio-text {
+  max-width: 600px;
+}
+
+.profile-image img {
+  width: auto;
+  max-width: 300px;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  margin: auto;
+}
+
+.image-caption {
+  font-size: 0.9em;
+  color: var(--footer-text-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1000px) {
+  .side-by-side,
   .side-by-side.reverse {
-    flex-direction: row-reverse;
+    flex-direction: column;
+    text-align: justify;
   }
 
   .bio-text {
-    max-width: 600px; /* Reduce max-width for better balance */
+    max-width: 90%;
   }
 
-  @media (max-width: 1000px) {
-    .side-by-side,
-    .side-by-side.reverse {
-      flex-direction: column;
-      text-align: justify;
-    }
-
-    .bio-text {
-      max-width: 90%;
-    }
-
-    .profile-image img {
-      max-width: 100%; /* Ensure image scales properly on smaller screens */
-    }
-  }
-
-  .post-date {
-    color: #888;
-    font-size: 0.9em;
-  }
-  
-  .post-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .post-list li {
-    margin-bottom: 0.8rem;
-  }
-  
-  .post-content p {
-    margin-bottom: 1rem;
-  }
-
-  /* Profile image sizing and responsive handling */
   .profile-image img {
-    width: auto; /* Allow image to scale dynamically */
-    max-width: 300px; /* Ensure image doesn't exceed this size */
-    justify-content: center;
-    height: auto;
-    border-radius: 6px;
-    display: block;
-  }
-
-  /* Make images inside the bio text responsive so they don't overflow */
-  .bio-text img {
     max-width: 100%;
-    height: auto;
   }
+}
 
-  /* Styling for the image caption below the profile image */
-  .image-caption {
-    font-size: 0.9em;
-    color: #666;
-    text-align: center;
-    margin-top: 0.5rem;
-  }
+/* Blog Post Styles */
+.post-date {
+  color: var(--post-date-color);
+  font-size: 0.9em;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  margin-bottom: 0.8rem;
+}
+
+.post-content p {
+  margin-bottom: 1rem;
+}
