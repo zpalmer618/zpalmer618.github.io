@@ -11,9 +11,6 @@ For my current project, initially, I almost reverted back to my old habit of sub
 
 Here’s a modified Slurm submit script with job array implementation:
 
-<!-- Adding a wrapper div with a class for the code block -->
-<div class="code-container">
-
 ```bash
 #!/bin/bash
 #SBATCH --job-name=JobArray
@@ -43,8 +40,6 @@ cp /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}/*.chk /home/$USER/
 
 rm /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}
 ```
-
-</div>
 
 The `#SBATCH --array` line tells Slurm to handle jobs in array format. For example, `#SBATCH --array=1-100` submits jobs `Job-1.com` to `Job-100.com`, with the assumption that each of the input files you are working with has the same `Job-` prefix. In my actual workflow, I break things down by basis set, so this would change to "631G," for example. Just leaving the job array there, submitting all 100 jobs to the queue, isn't terribly impressive. I *could* have just used the same script that made the input files to also make the individual submit scripts, and then make a `sub_all.sh` script. That's why we also include the `%10.` The `%10` ensures only 10 jobs run simultaneously, maintaining queue space for other projects. That's the crux of the whole thing, really. Lastly, each job uses the same resource limits (`nodes`, `ntasks`, `cpus-per-task`, etc.), applied individually rather than cumulatively. So, for the 100 jobs in the above example, each of them will get one node, one task, one cpu-per-task, etc. No need to pile on the resources.
 

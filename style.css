@@ -75,6 +75,7 @@ footer {
 
 .bio-text {
   max-width: 1100px; /* Increased width for better readability */
+  text-align: justify;
 }
 
 .profile-image img {
@@ -93,14 +94,33 @@ footer {
   margin-top: 0.5rem;
 }
 
-/* Adding styles for the code-container to prevent overflow */
-.code-container {
+/* Code block styling */
+pre {
   overflow-x: auto;
   max-width: 100%;
   background-color: #f8f8f8;
   padding: 1em;
   border: 1px solid #ddd;
   border-radius: 5px;
+  margin: 1.5em 0;
+  white-space: pre;
+}
+
+code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+/* Make sure code blocks don't break layout on mobile */
+@media (max-width: 768px) {
+  pre {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
 }
 
 /* Responsive Design */
