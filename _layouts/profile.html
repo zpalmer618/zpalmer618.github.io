@@ -4,15 +4,17 @@ layout: default
 {% assign image_side = page.image_side | default: "left" %}
 {% assign image_caption = page.image_caption | default: "" %}
 
-<div class="side-by-side{% if image_side == 'right' %} reverse{% endif %}">
-    <div class="profile-image">
+<div class="profile{% if image_side == 'right' %} profile--reverse{% endif %}">
+    {% if page.image %}
+    <figure class="profile__image">
         <img src="{{ page.image }}" alt="{{ page.title }}">
-        {% if image_caption != "" %}
-        <div class="image-caption">{{ image_caption }}</div>
+        {% if page.image_caption %}
+        <figcaption class="profile__caption">{{ page.image_caption }}</figcaption>
         {% endif %}
-    </div>
+    </figure>
+    {% endif %}
 
-    <div class="bio-text">
+    <div class="profile__bio">
         {{ content }}
     </div>
 </div>

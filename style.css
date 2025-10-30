@@ -60,38 +60,43 @@ footer {
 }
 
 /* Components */
-/* A utility class for creating a horizontally aligned layout with evenly spaced items */
-.side-by-side {
+/* Simple profile layout (image + bio) */
+.profile {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
   gap: var(--gap);
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
-.side-by-side.reverse {
+/* Modifier to flip the order (image on right) */
+.profile--reverse {
   flex-direction: row-reverse;
 }
 
-.bio-text {
-  max-width: 1100px; /* Increased width for better readability */
-  text-align: justify;
+.profile__image {
+  /* Keep the image block sized but allow shrink on small screens */
+  flex: 0 0 220px;
+  display: block;
 }
 
-.profile-image img {
-  width: auto;
-  max-width: 300px;
+.profile__image img {
+  width: 100%;
   height: auto;
   border-radius: 6px;
   display: block;
-  margin: 1rem auto; /* Adds space around the image */
 }
 
-.image-caption {
+.profile__caption {
   font-size: 0.9em;
   color: var(--footer-text-color);
   text-align: center;
   margin-top: 0.5rem;
+}
+
+.profile__bio {
+  flex: 1 1 320px; /* let the bio take remaining space, but not shrink too small */
+  min-width: 200px;
 }
 
 /* Code block styling */
@@ -124,18 +129,21 @@ code {
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  /* Switch to column layout for smaller screens to ensure better readability and stacking of content */
-  .side-by-side,
-  .side-by-side.reverse {
+@media (max-width: 900px) {
+  /* Stack profile vertically on narrow screens */
+  .profile,
+  .profile.profile--reverse {
     flex-direction: column;
     text-align: justify;
   }
-  .bio-text {
-    max-width: 90%;
+
+  .profile__image {
+    flex: 0 0 100%;
+    width: 100%;
   }
 
-  .profile-image img {
+  .profile__bio {
+    flex: 1 1 100%;
     max-width: 100%;
   }
 }
