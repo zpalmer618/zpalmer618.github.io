@@ -95,7 +95,7 @@ footer {
 }
 
 .profile__bio {
-  flex: 1 1 320px; /* let the bio take remaining space, but not shrink too small */
+  flex: 1 1 450px; /* let the bio take remaining space, but not shrink too small */
   min-width: 200px;
   text-align: justify;
 }
