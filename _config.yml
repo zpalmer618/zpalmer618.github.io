@@ -1,4 +1,6 @@
-title: My Website
+title: Dr. Zach Palmer's Website
+description: A colletion of my academic works and blogs.
+url: "https://zpalmer618.github.io" # the subpath of
 nav_items:
   - title: Home
     url: /
