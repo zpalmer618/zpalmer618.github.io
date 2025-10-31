@@ -20,25 +20,10 @@ Here’s a modified Slurm submit script with job array implementation:
 #SBATCH --cpus-per-task=1
 #SBATCH --time=1:00:00 
 #SBATCH --mem=9G
-#SBATCH --output=./log_files/Job-%a.out
-
-if [ -d /local/scratch/$USER/ ]
-        then :
-        else mkdir /local/scratch/$USER/
-fi
-
-mkdir /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}
-cp /home/$USER/job_array_tutorial/Job-${SLURM_ARRAY_TASK_ID}.com /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}/
-cd /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}
+#SBATCH --output=Job-%a.out
 
 program.sh Job-${SLURM_ARRAY_TASK_ID}.com
 
-cd /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}
-
-cp /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}/*.out /home/$USER/job_array_tutorial/out_files/
-cp /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}/*.chk /home/$USER/job_array_tutorial/out_files/Job-${SLURM_ARRAY_TASK_ID}.chk
-
-rm /local/scratch/$USER/${SLURM_JOBID}_${SLURM_ARRAY_TASK_ID}
 ```
 
 The `#SBATCH --array` line tells Slurm to handle jobs in array format. For example, `#SBATCH --array=1-100` submits jobs `Job-1.com` to `Job-100.com`, with the assumption that each of the input files you are working with has the same `Job-` prefix. In my actual workflow, I break things down by basis set, so this would change to "631G," for example. Just leaving the job array there, submitting all 100 jobs to the queue, isn't terribly impressive. I *could* have just used the same script that made the input files to also make the individual submit scripts, and then make a `sub_all.sh` script. That's why we also include the `%10.` The `%10` ensures only 10 jobs run simultaneously, maintaining queue space for other projects. That's the crux of the whole thing, really. Lastly, each job uses the same resource limits (`nodes`, `ntasks`, `cpus-per-task`, etc.), applied individually rather than cumulatively. So, for the 100 jobs in the above example, each of them will get one node, one task, one cpu-per-task, etc. No need to pile on the resources.
