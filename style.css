@@ -76,7 +76,8 @@ footer {
 
 .profile__image {
   /* Keep the image block sized but allow shrink on small screens */
-  flex: 0 0 225px;
+  flex: 0 1 225px;
+  max-width: 250px;
   display: block;
 }
 
@@ -139,7 +140,7 @@ code {
   }
 
   .profile__image {
-    flex: 0 0 100%;
+    flex: 0 1 100%;
     width: 100%;
   }
 
