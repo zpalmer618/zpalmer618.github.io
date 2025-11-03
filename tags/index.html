@@ -1,0 +1,19 @@
+---
+layout: default
+title: "Tags"
+permalink: /tags/
+---
+
+<h1>Tags</h1>
+<ul>
+    {% assign tags_list = site.tags | sort %}
+    {% for tag in tags_list %}
+      {% assign tag_name = tag[0] %}
+      {% assign posts_for_tag = tag[1] %}
+      <li>
+        <a href="{{ '/tag/' | append: tag_name | slugify | append: '/' }}">
+          {{ tag_name }} ({{ posts_for_tag | size }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>

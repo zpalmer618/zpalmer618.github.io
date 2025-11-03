@@ -1,6 +1,7 @@
 ---
 layout: post
 title: A Foray into Slurm Job Arrays
+tags: [tutorial, slurm]
 ---
 
 One of my research projects as a postdoc at MS&T involves benchmarking a plethora of computational methods and basis sets against numerous molecular systems. At some point, I decided it was reasonably achievable to compute quantum mechanical properties for a combination of 80 systems, 22 methods, and 10 basis sets. That's *a lot* of jobs to submit to a workload manager, like Slurm, all at once!
