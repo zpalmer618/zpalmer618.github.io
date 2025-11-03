@@ -11,7 +11,8 @@ permalink: /tag/
       {% assign tag_name = tag[0] %}
       {% assign posts_for_tag = tag[1] %}
       <li>
-        <a href="{{ '/tag/' | append: tag_name | slugify | append: '/' }}">
+        {% assign tag_slug = tag_name | slugify %}
+        <a href="/tag/{{ tag_slug }}/">
           {{ tag_name }} ({{ posts_for_tag | size }})
         </a>
       </li>
