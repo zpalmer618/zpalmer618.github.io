@@ -1,5 +1,5 @@
 ---
 layout: tag
 tag: tutorial
-permalink: /tag/tutorial
+permalink: /tag/tutorial/
 ---
