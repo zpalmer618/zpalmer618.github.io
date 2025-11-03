@@ -95,7 +95,7 @@ footer {
 
 .profile__caption {
   font-size: 0.9em;
-  color: var(--footer-text-color);
+  color: var(--post-date-color);
   text-align: center;
   margin-top: 0.5rem;
 }
