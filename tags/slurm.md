@@ -1,5 +1,5 @@
 ---
 layout: tag
 tag: slurm
-permalink: /tags/slurm/
+permalink: /tag/slurm/
 ---
