@@ -1,19 +1,14 @@
 /* Global Styles */
 :root {
   --font-family: system-ui, sans-serif;
-  /*--background-color: #fafafa;*/
   --background-color: #EAD3AF;
   --text-color: #140800;
-  /*--text-color: #EBEBEB;*/
- /* --header-bg-color: #2d2d2d;*/
   --header-bg-color: #3F4B3B;
   --header-text-color: #EBEBEB;
   --highlight-color: #ff6600;
   --footer-bg-color: #3F4B3B;
   --footer-text-color: #ebebeb;
   --post-date-color: #291000;
-  /*--footer-text-color: #666;*/
-  /*--post-date-color: #888;*/
   --gap: 1.5rem;
 }
 
@@ -111,10 +106,8 @@ pre {
   overflow-x: auto;
   max-width: 100%;
   background-color: #f2e6cf;
-  /*background-color: #f8f8f8;*/
   padding: 1em;
   border: 1px solid #e5cc9f;
-  /*border: 1px solid #ddd;*/
   border-radius: 5px;
   margin: 1.5em 0;
   white-space: pre;
