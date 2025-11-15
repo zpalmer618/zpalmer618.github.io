@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dr. Zach Palmer&apos;s Website</title>
+    <description>A colletion of my academic works and blogs.</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 14 Nov 2025 08:56:26 -0600</pubDate>
+    <lastBuildDate>Fri, 14 Nov 2025 08:56:26 -0600</lastBuildDate>
+    <generator>Jekyll v4.4.1</generator>
+    
+      <item>
+        <title>Quick Update on Job Arrays</title>
+        <description>&lt;p&gt;Well, it seems that you can learn a lot in just a few days of bashing your head against the keyboard. For a little context, a couple of days ago I posted a blog discussing my recent experience getting into job arrays for the Slurm workload manager and showing a sample Slurm submit script. If you need a refresher or if you’re just tuning in, I’ll link to it &lt;a href=&quot;https://zpalmer618.github.io/2025/10/29/job_arrays.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Some of you keen-eyed individuals out there might notice that if I simply use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;${SLURM_ARRAY_TASK_ID}&lt;/code&gt; as an indexer for my file names and log files, that would imply that I have some input files lying around that are numbered but not padded. If any of you have spent time in the computing sphere, you would know how gross a directory can start to look if things are labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file10&lt;/code&gt;, or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file20&lt;/code&gt;. For those of you who don’t spend a lot of time “in the trenches,” let’s say you have 20 files labeled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file1&lt;/code&gt; - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file10&lt;/code&gt;. If you were to list them out, it would look something like the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;file1
+file10
+file2
+...
+file7
+file8
+file9
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If that doesn’t infuriate you, I don’t know what will… In all seriousness, though, this can turn into a pretty big headache down the line if you constructed your files sequentially. For instance, if you know that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file2&lt;/code&gt; has a number that needs to be subtracted from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file1&lt;/code&gt;, but they have the same leading string, using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grep&lt;/code&gt; to grab these strings may quickly become cumbersome. That’s why it would be nice to use a numbering or naming convention that is more convenient for yourself later on. That being said, I would like to present two different naming conventions that I have found over the past couple of days that may alleviate some unnecessary pain.&lt;/p&gt;
+
+&lt;h2 id=&quot;1-padded-array-ids&quot;&gt;1. Padded Array IDs&lt;/h2&gt;
+&lt;p&gt;If you’d like to stick with a numerical naming convention but would like fewer headaches in the future, here is the code snippet for easily padding your array IDs.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --job-name=padded_arrays&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --nodes=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --ntasks=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --array=1-10&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --cpus-per-task=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --time=48:00:00 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --mem=9G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --output=file-%a.log&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;raw_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SLURM_ARRAY_TASK_ID&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;pad_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%02d&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$raw_id&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+program.sh file-&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pad_id&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Utilizing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;printf&lt;/code&gt; function here allows us to take the array ID, which has been assigned to the new variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;raw_id&lt;/code&gt;, and pad it with a couple of zeros. Now, if you have files that have a padded numerical index like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file-01&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file-10&lt;/code&gt;, 1) they’ll list properly in the directory structure making later file parsing easier, and 2) they are still recognized by the Slurm array head job!&lt;/p&gt;
+
+&lt;h2 id=&quot;2-strings-as-slurm-array-ids&quot;&gt;2. Strings as Slurm Array IDs&lt;/h2&gt;
+&lt;p&gt;What if you don’t want to use a numerical index in the file name at all? What if your file generation script provides explicitly named files that will be easier to parse through later without numbers? Lucky for you, there is a pretty clever and cute way of getting around the need for numbers for this purpose. Here is the code snippet for using strings as Slurm array IDs:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --job-name=padded_arrays&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --nodes=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --ntasks=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --array=1-10&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --cpus-per-task=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --time=48:00:00 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --mem=9G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --output=file-%a.log&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SLURM_ARRAY_TASK_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;q;d&quot;&lt;/span&gt; file_list &lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+program.sh &lt;span class=&quot;nv&quot;&gt;$input&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Essentially, you can have whatever name you want for the files you want to throw at your job array. All you need to do is gather a list of the file names, e.g., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ls [your file name here] &amp;gt; file_list&lt;/code&gt;, and you can use that clever &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sed&lt;/code&gt; command to use the current Slurm array ID as an indexer for grabbing a specific line out of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file_list&lt;/code&gt;! How neat is that? In case you’re wondering, yes, it works. I revamped my whole project today just so I could use this naming convention for easier data handling later on. However, I must say that I did not find either of these out on my own and will definitely give credit where credit is due. I found &lt;a href=&quot;https://hpcdocs.hpc.arizona.edu/running_jobs/batch_jobs/array_jobs/&quot;&gt;this document&lt;/a&gt; &lt;strong&gt;&lt;em&gt;very&lt;/em&gt;&lt;/strong&gt; helpful in this endeavor.&lt;/p&gt;
+
+&lt;p&gt;Again, I hope this little blog and code snippet tutorial have been helpful for you in some way. Thanks for tuning in and subscribe to my RSS feed! You should find a link at the bottom of the page. Thanks, folks! Have a good one.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 31 Oct 2025 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2025/10/31/ja_update.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2025/10/31/ja_update.html</guid>
+        
+        <category>tutorial</category>
+        
+        <category>slurm</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>A Foray into Slurm Job Arrays</title>
+        <description>&lt;p&gt;One of my research projects as a postdoc at MS&amp;amp;T involves benchmarking a plethora of computational methods and basis sets against numerous molecular systems. At some point, I decided it was reasonably achievable to compute quantum mechanical properties for a combination of 80 systems, 22 methods, and 10 basis sets. That’s &lt;em&gt;a lot&lt;/em&gt; of jobs to submit to a workload manager, like Slurm, all at once!&lt;/p&gt;
+
+&lt;p&gt;During my graduate career at Ole Miss, I never really considered that to be a problem and would often submit massive numbers of jobs to the HPC cluster without much thought. At the time, I was working on simulating infrared and microwave spectral data, and doing so necessitated a large number of calculations to be submitted all at once, clogging my own queue. This changed when my graduate school colleague and friend &lt;a href=&quot;https://bwestbro.com&quot;&gt;Brent&lt;/a&gt; introduced his automated &lt;a href=&quot;https://github.com/ntBre/pbqff&quot;&gt;push-button QFF&lt;/a&gt;(PBQFF) framework. It allowed me to submit a single job that managed all computations, collected data, and generated the simulated spectra.&lt;/p&gt;
+
+&lt;p&gt;For my current project, initially, I almost reverted back to my old habit of submitting large job chunks, wasting most of my queue space. However, reminiscing on my graduate career reminded me that figuring out a way to automate my current situation might be worthwhile. I don’t really have the time, and honestly the patience, to manually submit and wait on roughly 17,000 computations. That’s when I discovered &lt;a href=&quot;https://slurm.schedmd.com/job_array.html&quot;&gt;Slurm Job Arrays&lt;/a&gt; in the MS&amp;amp;T HPC cluster docs. This functionality lets you run the same script/function/program on multiple files efficiently. Now, admittedly, I didn’t quite understand how to implement job arrays for my current workflow. However, after reading about job arrays from a bunch of sources &lt;strong&gt;&lt;em&gt;and&lt;/em&gt;&lt;/strong&gt; chatting with a graduate student in my group at Mizzou, I was able to successfully implement job arrays for my workflow.&lt;/p&gt;
+
+&lt;p&gt;Here’s a modified Slurm submit script with job array implementation:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --job-name=JobArray&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --nodes=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --ntasks=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --array=1-100%10&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --cpus-per-task=1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --time=1:00:00 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --mem=9G&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#SBATCH --output=Job-%a.out&lt;/span&gt;
+
+program.sh Job-&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SLURM_ARRAY_TASK_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;.com
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#SBATCH --array&lt;/code&gt; line tells Slurm to handle jobs in array format. For example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#SBATCH --array=1-100&lt;/code&gt; submits jobs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Job-1.com&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Job-100.com&lt;/code&gt;, with the assumption that each of the input files you are working with has the same &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Job-&lt;/code&gt; prefix. In my actual workflow, I break things down by basis set, so this would change to “631G,” for example. Just leaving the job array there, submitting all 100 jobs to the queue, isn’t terribly impressive. I &lt;em&gt;could&lt;/em&gt; have just used the same script that made the input files to also make the individual submit scripts, and then make a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sub_all.sh&lt;/code&gt; script. That’s why we also include the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%10.&lt;/code&gt; The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%10&lt;/code&gt; ensures only 10 jobs run simultaneously, maintaining queue space for other projects. That’s the crux of the whole thing, really. Lastly, each job uses the same resource limits (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nodes&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ntasks&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cpus-per-task&lt;/code&gt;, etc.), applied individually rather than cumulatively. So, for the 100 jobs in the above example, each of them will get one node, one task, one cpu-per-task, etc. No need to pile on the resources.&lt;/p&gt;
+
+&lt;p&gt;That’s really it. When I was first looking at it, it seemed a whole lot more complicated than what it really turned out to be. The docs were definitely confusing at first, but taking some time to read more about it and chat with someone who had some working experience, I was able to get my own job arrays set up to run in no time. I hope this walkthrough can do the same for you! Whether you’ve never heard about job arrays before now, or you just want to solidify your understanding. Anyway, I hope this helped! Thanks, folks.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 29 Oct 2025 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2025/10/29/job_arrays.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2025/10/29/job_arrays.html</guid>
+        
+        <category>tutorial</category>
+        
+        <category>slurm</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>My First Blog Post</title>
+        <description>&lt;p&gt;I’m not quite sure if I should put something funny here like it’s my first inaugural address or whatever. I guess I’ll just start by saying, “Thanks for checking out my first blog post of many to come, maybe!” I hope you enjoyed coming to the site and reading through it. If you ever have any suggestions on something I could blog about, send me an &lt;a href=&quot;mailto:zachpalmer@protonmail.com&quot;&gt;email&lt;/a&gt;!&lt;/p&gt;
+</description>
+        <pubDate>Fri, 24 Oct 2025 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2025/10/24/intro.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2025/10/24/intro.html</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

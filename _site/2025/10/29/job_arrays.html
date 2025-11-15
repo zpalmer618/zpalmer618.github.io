@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Foray into Slurm Job Arrays</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="alternate" type="application/rss+xml" href="http://localhost:4000/feed.xml">
+</head>
+<body>
+  <header>
+    <header>
+        <nav>
+          
+            <a href="/" class="">
+              Home
+            </a>
+          
+            <a href="/about.html" class="">
+              About
+            </a>
+          
+            <a href="/blog.html" class="">
+              Blogs
+            </a>
+          
+        </nav>
+      </header>
+    </header>
+  <main>
+    <article class="post">
+    <h1>A Foray into Slurm Job Arrays</h1>
+    <p class="post-date">October 29, 2025 | Dr. Palmer</p>
+    
+      <p class="post-tags">
+        Tags:
+        
+          
+          <a href="/tag/tutorial/">tutorial</a>, 
+        
+          
+          <a href="/tag/slurm/">slurm</a>
+        
+      </p>
+    
+
+    <div class="post-content">
+        <p>One of my research projects as a postdoc at MS&amp;T involves benchmarking a plethora of computational methods and basis sets against numerous molecular systems. At some point, I decided it was reasonably achievable to compute quantum mechanical properties for a combination of 80 systems, 22 methods, and 10 basis sets. That’s <em>a lot</em> of jobs to submit to a workload manager, like Slurm, all at once!</p>
+
+<p>During my graduate career at Ole Miss, I never really considered that to be a problem and would often submit massive numbers of jobs to the HPC cluster without much thought. At the time, I was working on simulating infrared and microwave spectral data, and doing so necessitated a large number of calculations to be submitted all at once, clogging my own queue. This changed when my graduate school colleague and friend <a href="https://bwestbro.com">Brent</a> introduced his automated <a href="https://github.com/ntBre/pbqff">push-button QFF</a>(PBQFF) framework. It allowed me to submit a single job that managed all computations, collected data, and generated the simulated spectra.</p>
+
+<p>For my current project, initially, I almost reverted back to my old habit of submitting large job chunks, wasting most of my queue space. However, reminiscing on my graduate career reminded me that figuring out a way to automate my current situation might be worthwhile. I don’t really have the time, and honestly the patience, to manually submit and wait on roughly 17,000 computations. That’s when I discovered <a href="https://slurm.schedmd.com/job_array.html">Slurm Job Arrays</a> in the MS&amp;T HPC cluster docs. This functionality lets you run the same script/function/program on multiple files efficiently. Now, admittedly, I didn’t quite understand how to implement job arrays for my current workflow. However, after reading about job arrays from a bunch of sources <strong><em>and</em></strong> chatting with a graduate student in my group at Mizzou, I was able to successfully implement job arrays for my workflow.</p>
+
+<p>Here’s a modified Slurm submit script with job array implementation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --job-name=JobArray</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH --array=1-100%10</span>
+<span class="c">#SBATCH --cpus-per-task=1</span>
+<span class="c">#SBATCH --time=1:00:00 </span>
+<span class="c">#SBATCH --mem=9G</span>
+<span class="c">#SBATCH --output=Job-%a.out</span>
+
+program.sh Job-<span class="k">${</span><span class="nv">SLURM_ARRAY_TASK_ID</span><span class="k">}</span>.com
+
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">#SBATCH --array</code> line tells Slurm to handle jobs in array format. For example, <code class="language-plaintext highlighter-rouge">#SBATCH --array=1-100</code> submits jobs <code class="language-plaintext highlighter-rouge">Job-1.com</code> to <code class="language-plaintext highlighter-rouge">Job-100.com</code>, with the assumption that each of the input files you are working with has the same <code class="language-plaintext highlighter-rouge">Job-</code> prefix. In my actual workflow, I break things down by basis set, so this would change to “631G,” for example. Just leaving the job array there, submitting all 100 jobs to the queue, isn’t terribly impressive. I <em>could</em> have just used the same script that made the input files to also make the individual submit scripts, and then make a <code class="language-plaintext highlighter-rouge">sub_all.sh</code> script. That’s why we also include the <code class="language-plaintext highlighter-rouge">%10.</code> The <code class="language-plaintext highlighter-rouge">%10</code> ensures only 10 jobs run simultaneously, maintaining queue space for other projects. That’s the crux of the whole thing, really. Lastly, each job uses the same resource limits (<code class="language-plaintext highlighter-rouge">nodes</code>, <code class="language-plaintext highlighter-rouge">ntasks</code>, <code class="language-plaintext highlighter-rouge">cpus-per-task</code>, etc.), applied individually rather than cumulatively. So, for the 100 jobs in the above example, each of them will get one node, one task, one cpu-per-task, etc. No need to pile on the resources.</p>
+
+<p>That’s really it. When I was first looking at it, it seemed a whole lot more complicated than what it really turned out to be. The docs were definitely confusing at first, but taking some time to read more about it and chat with someone who had some working experience, I was able to get my own job arrays set up to run in no time. I hope this walkthrough can do the same for you! Whether you’ve never heard about job arrays before now, or you just want to solidify your understanding. Anyway, I hope this helped! Thanks, folks.</p>
+
+
+    </div>
+    <p><a href="/blog.html">Back to Blogs</a></p>
+</article>
+
+  </main>
+
+  <footer>
+    <p>© 2025 C. Zachary Palmer, Ph.D. Hosted with <span title="love">❤️</span> on GitHub Pages.</p>
+    <p><a href="/feed.xml" style="color: #ebebeb;">Subscribe via RSS</a></p>
+  </footer>
+</body>
+</html>

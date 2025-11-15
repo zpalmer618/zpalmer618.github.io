@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Update on Job Arrays</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="alternate" type="application/rss+xml" href="http://localhost:4000/feed.xml">
+</head>
+<body>
+  <header>
+    <header>
+        <nav>
+          
+            <a href="/" class="">
+              Home
+            </a>
+          
+            <a href="/about.html" class="">
+              About
+            </a>
+          
+            <a href="/blog.html" class="">
+              Blogs
+            </a>
+          
+        </nav>
+      </header>
+    </header>
+  <main>
+    <article class="post">
+    <h1>Quick Update on Job Arrays</h1>
+    <p class="post-date">October 31, 2025 | Dr. Palmer</p>
+    
+      <p class="post-tags">
+        Tags:
+        
+          
+          <a href="/tag/tutorial/">tutorial</a>, 
+        
+          
+          <a href="/tag/slurm/">slurm</a>
+        
+      </p>
+    
+
+    <div class="post-content">
+        <p>Well, it seems that you can learn a lot in just a few days of bashing your head against the keyboard. For a little context, a couple of days ago I posted a blog discussing my recent experience getting into job arrays for the Slurm workload manager and showing a sample Slurm submit script. If you need a refresher or if you’re just tuning in, I’ll link to it <a href="https://zpalmer618.github.io/2025/10/29/job_arrays.html">here</a>.</p>
+
+<p>Some of you keen-eyed individuals out there might notice that if I simply use <code class="language-plaintext highlighter-rouge">${SLURM_ARRAY_TASK_ID}</code> as an indexer for my file names and log files, that would imply that I have some input files lying around that are numbered but not padded. If any of you have spent time in the computing sphere, you would know how gross a directory can start to look if things are labeled <code class="language-plaintext highlighter-rouge">file1</code>, <code class="language-plaintext highlighter-rouge">file10</code>, or <code class="language-plaintext highlighter-rouge">file20</code>. For those of you who don’t spend a lot of time “in the trenches,” let’s say you have 20 files labeled <code class="language-plaintext highlighter-rouge">file1</code> - <code class="language-plaintext highlighter-rouge">file10</code>. If you were to list them out, it would look something like the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>file1
+file10
+file2
+...
+file7
+file8
+file9
+</code></pre></div></div>
+
+<p>If that doesn’t infuriate you, I don’t know what will… In all seriousness, though, this can turn into a pretty big headache down the line if you constructed your files sequentially. For instance, if you know that <code class="language-plaintext highlighter-rouge">file2</code> has a number that needs to be subtracted from <code class="language-plaintext highlighter-rouge">file1</code>, but they have the same leading string, using <code class="language-plaintext highlighter-rouge">grep</code> to grab these strings may quickly become cumbersome. That’s why it would be nice to use a numbering or naming convention that is more convenient for yourself later on. That being said, I would like to present two different naming conventions that I have found over the past couple of days that may alleviate some unnecessary pain.</p>
+
+<h2 id="1-padded-array-ids">1. Padded Array IDs</h2>
+<p>If you’d like to stick with a numerical naming convention but would like fewer headaches in the future, here is the code snippet for easily padding your array IDs.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --job-name=padded_arrays</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH --array=1-10</span>
+<span class="c">#SBATCH --cpus-per-task=1</span>
+<span class="c">#SBATCH --time=48:00:00 </span>
+<span class="c">#SBATCH --mem=9G</span>
+<span class="c">#SBATCH --output=file-%a.log</span>
+
+<span class="nv">raw_id</span><span class="o">=</span><span class="nv">$SLURM_ARRAY_TASK_ID</span>
+<span class="nv">pad_id</span><span class="o">=</span><span class="si">$(</span><span class="nb">printf</span> <span class="s2">"%02d"</span> <span class="s2">"</span><span class="nv">$raw_id</span><span class="s2">"</span><span class="si">)</span>
+
+program.sh file-<span class="k">${</span><span class="nv">pad_id</span><span class="k">}</span>.com
+</code></pre></div></div>
+
+<p>Utilizing the <code class="language-plaintext highlighter-rouge">printf</code> function here allows us to take the array ID, which has been assigned to the new variable <code class="language-plaintext highlighter-rouge">raw_id</code>, and pad it with a couple of zeros. Now, if you have files that have a padded numerical index like <code class="language-plaintext highlighter-rouge">file-01</code> or <code class="language-plaintext highlighter-rouge">file-10</code>, 1) they’ll list properly in the directory structure making later file parsing easier, and 2) they are still recognized by the Slurm array head job!</p>
+
+<h2 id="2-strings-as-slurm-array-ids">2. Strings as Slurm Array IDs</h2>
+<p>What if you don’t want to use a numerical index in the file name at all? What if your file generation script provides explicitly named files that will be easier to parse through later without numbers? Lucky for you, there is a pretty clever and cute way of getting around the need for numbers for this purpose. Here is the code snippet for using strings as Slurm array IDs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --job-name=padded_arrays</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH --array=1-10</span>
+<span class="c">#SBATCH --cpus-per-task=1</span>
+<span class="c">#SBATCH --time=48:00:00 </span>
+<span class="c">#SBATCH --mem=9G</span>
+<span class="c">#SBATCH --output=file-%a.log</span>
+
+<span class="nv">input</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span> <span class="nb">sed</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SLURM_ARRAY_TASK_ID</span><span class="k">}</span><span class="s2">q;d"</span> file_list <span class="si">)</span><span class="s2">"</span>
+
+program.sh <span class="nv">$input</span>
+</code></pre></div></div>
+
+<p>Essentially, you can have whatever name you want for the files you want to throw at your job array. All you need to do is gather a list of the file names, e.g., <code class="language-plaintext highlighter-rouge">ls [your file name here] &gt; file_list</code>, and you can use that clever <code class="language-plaintext highlighter-rouge">sed</code> command to use the current Slurm array ID as an indexer for grabbing a specific line out of <code class="language-plaintext highlighter-rouge">file_list</code>! How neat is that? In case you’re wondering, yes, it works. I revamped my whole project today just so I could use this naming convention for easier data handling later on. However, I must say that I did not find either of these out on my own and will definitely give credit where credit is due. I found <a href="https://hpcdocs.hpc.arizona.edu/running_jobs/batch_jobs/array_jobs/">this document</a> <strong><em>very</em></strong> helpful in this endeavor.</p>
+
+<p>Again, I hope this little blog and code snippet tutorial have been helpful for you in some way. Thanks for tuning in and subscribe to my RSS feed! You should find a link at the bottom of the page. Thanks, folks! Have a good one.</p>
+
+    </div>
+    <p><a href="/blog.html">Back to Blogs</a></p>
+</article>
+
+  </main>
+
+  <footer>
+    <p>© 2025 C. Zachary Palmer, Ph.D. Hosted with <span title="love">❤️</span> on GitHub Pages.</p>
+    <p><a href="/feed.xml" style="color: #ebebeb;">Subscribe via RSS</a></p>
+  </footer>
+</body>
+</html>

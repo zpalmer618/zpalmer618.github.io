@@ -1,0 +1,170 @@
+/* Global Styles */
+:root {
+  --font-family: system-ui, sans-serif;
+  --background-color: #EAD3AF;
+  --text-color: #140800;
+  --header-bg-color: #3F4B3B;
+  --header-text-color: #EBEBEB;
+  --highlight-color: #ff6600;
+  --footer-bg-color: #3F4B3B;
+  --footer-text-color: #ebebeb;
+  --post-date-color: #291000;
+  --gap: 1.5rem;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Layout */
+header {
+  background: var(--header-bg-color);
+  color: var(--header-text-color);
+  padding: 1rem;
+  text-align: center;
+}
+
+nav a {
+  color: var(--header-text-color);
+  margin: 0 1rem;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav a.active {
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--highlight-color);
+}
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: justify;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--footer-bg-color);
+  color: var(--footer-text-color);
+}
+
+/* Components */
+/* Simple profile layout (image + bio) */
+.profile {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap);
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Modifier to flip the order (image on right) */
+.profile--reverse {
+  flex-direction: row-reverse;
+}
+
+.profile__image {
+  /* Keep the image block sized but allow shrink on small screens */
+  flex: 0 1 225px;
+  max-width: 250px;
+  display: block;
+}
+
+.profile__image img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+}
+
+.profile__caption {
+  font-size: 0.9em;
+  color: var(--post-date-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.profile__bio {
+  flex: 1 1 450px; /* let the bio take remaining space, but not shrink too small */
+  min-width: 200px;
+  text-align: justify;
+}
+
+/* Code block styling */
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+  background-color: #f2e6cf;
+  padding: 1em;
+  border: 1px solid #e5cc9f;
+  border-radius: 5px;
+  margin: 1.5em 0;
+  white-space: pre;
+}
+
+code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+/* Make sure code blocks don't break layout on mobile */
+@media (max-width: 768px) {
+  pre {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  /* Stack profile vertically on narrow screens */
+  .profile,
+  .profile.profile--reverse {
+    flex-direction: column;
+    text-align: justify;
+  }
+
+  .profile__image {
+    flex: 0 1 100%;
+    width: 100%;
+  }
+
+  .profile__bio {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* Blog Post Styles */
+.post-date {
+  color: var(--post-date-color);
+  font-size: 0.9em;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  margin-bottom: 0.8rem;
+}
+
+.post-content p {
+  margin-bottom: 1rem;
+}
